@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samer-polybot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samer-polybot
+  template:
+    metadata:
+      labels:
+        app: samer-polybot
+    spec:
+      containers:
+        - name: samer-polybot
+          image: walaahij/polybot:1.2
+          ports:
+            - containerPort: 8443
+          env:
+            - name: TELEGRAM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: token-secret
+                  key: telegram-token
+            - name: TELEGRAM_APP_URL
+              value: "https://samer.atech-bot.click"
