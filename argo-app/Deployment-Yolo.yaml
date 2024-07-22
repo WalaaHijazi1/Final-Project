@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yolo5-samer-deployment   # Name of the deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yolo5-samer            # Selector to match the labels of pods controlled by this deployment
+  template:
+    metadata:
+      labels:
+        app: yolo5-samer          # Labels for pods created by this template
+    spec:
+      containers:
+        - name: yolo5-container       # Name of the container
+          image: walaahij/yolo5-service:1.1  # Docker image for the container
+       #   ports:
+       #    - containerPort: 8081     # Port the container listens on #### it is redundant
+          env:
+                - name: TELEGRAM_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: token-secret
+                      key: telegram-token
+                - name: TELEGRAM_APP_URL
+                  value: "https://samer.atech-bot.click"
