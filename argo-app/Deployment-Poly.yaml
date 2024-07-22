@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: samer-polybot
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: samer-polybot
