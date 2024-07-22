@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: yolo5-container       # Name of the container
-          image: walaahij/yolo5-service:1.1  # Docker image for the container
+          image: walaahij/yolo5-service:63_20240722_232959
        #   ports:
        #    - containerPort: 8081     # Port the container listens on #### it is redundant
           env:
