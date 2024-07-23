@@ -1,17 +1,59 @@
-name: CI
+name: Trigger Jenkins on Push
 
 on:
   push:
     branches:
-      - main
-    paths-ignore:
-      - '**.md'
+    - main
 
 jobs:
   validate_and_trigger_jenkins_job:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: "!contains(github.event.head_commit.message, '[Jenkins]')"
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Lint Python Code
+      run: |
+        source venv/bin/activate
+        pip install flake8
+        # Specify your Python code directories here
+        flake8 ./polybot/app.py ./polybot/bot.py ./yolo5/app.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    #     pip install pytest
+    #     pytest
+
+    - name: Install Java (required for Jenkins CLI)
+      # - name: Run Unit Tests
+      #     source venv/bin/activate
+      #   run: |
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y default-jre
+
+    - name: Download Jenkins CLI JAR
+      run: |
+        curl -O https://jenkins-final-project.atech-bot.click/jnlpJars/jenkins-cli.jar
+
+    - name: Trigger Jenkins job using Jenkins CLI
+      env:
+        JENKINS_URL: https://jenkins-final-project.atech-bot.click
+        JENKINS_USER: admin
+        JENKINS_PASSWORD: walaa1234
+        #JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}  # Make sure to store Jenkins password securely in GitHub Secrets
+        JOB_NAME: kube_jen
+      run: |
+        java -jar jenkins-cli.jar -s "$JENKINS_URL" -auth "$JENKINS_USER:$JENKINS_PASSWORD" build "$JOB_NAME"
