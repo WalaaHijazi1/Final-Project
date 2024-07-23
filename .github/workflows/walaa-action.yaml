@@ -1,9 +1,11 @@
-name: Trigger Jenkins on Push
+name: CI
 
 on:
   push:
     branches:
-    - main
+      - main
+    paths-ignore:
+      - '**.md'
 
 jobs:
   validate_and_trigger_jenkins_job:
@@ -11,48 +13,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-
-    - name: Clone yolov5 Repository
-      run: |
-        git clone https://github.com/ultralytics/yolov5.git yolov5
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.12'
-
-    - name: Install dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-    - name: Lint Python Code
-      run: |
-        source venv/bin/activate
-        pip install flake8
-        # Specify your Python code directories here
-        flake8 ./polybot/app.py ./polybot/bot.py ./yolo5/app.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-
-    - name: Set up Java 17
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: '17'
-
-    - name: Download Jenkins CLI JAR
-      run: |
-        curl -O https://jenkins-final-project.atech-bot.click/jnlpJars/jenkins-cli.jar
-
-    - name: Trigger Jenkins job using REST API
-      env:
-        JENKINS_URL: https://jenkins-final-project.atech-bot.click
-        JENKINS_USER: admin
-        JENKINS_PASSWORD: walaa1234
-        # JENKINS_PASSWORD: ${{ secrets.JENKINS_PASSWORD }}  # Make sure to store Jenkins password securely in GitHub Secrets
-        JOB_NAME: kube_jen
-      run: |
-        curl -X POST "$JENKINS_URL/job/$JOB_NAME/build" --user "$JENKINS_USER:$JENKINS_PASSWORD"
+      - name: Checkout Repository
+        uses: actions/checkout@v2
