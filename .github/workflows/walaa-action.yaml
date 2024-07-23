@@ -1,7 +1,11 @@
+name: CI
+
 on:
   push:
     branches:
-    - main
+      - main
+    paths-ignore:
+      - '**.md'
 
 jobs:
   validate_and_trigger_jenkins_job:
@@ -9,5 +13,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
