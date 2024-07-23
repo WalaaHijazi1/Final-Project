@@ -14,6 +14,10 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Clone yolov5 Repository
+      run: |
+        git clone https://github.com/ultralytics/yolov5.git yolov5
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -26,10 +30,22 @@ jobs:
         pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Install Java (required for Jenkins CLI)
+    - name: Lint Python Code
       run: |
-        sudo apt-get update
-        sudo apt-get install -y default-jre
+        source venv/bin/activate
+        pip install flake8
+        # Specify your Python code directories here
+        flake8 ./polybot/app.py ./polybot/bot.py ./yolo5/app.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Set up Java 17
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+
+    - name: Download Jenkins CLI JAR
+      run: |
+        curl -O https://jenkins-final-project.atech-bot.click/jnlpJars/jenkins-cli.jar
 
     - name: Trigger Jenkins job using REST API
       env:
