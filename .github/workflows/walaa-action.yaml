@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate_and_trigger_jenkins_job:
-    if: "!contains(github.event.head_commit.message, '[Jenkins]')"
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
 
     steps:
