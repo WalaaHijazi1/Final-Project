@@ -165,7 +165,7 @@ class ObjectDetectionBot(Bot):
 
             # Send message to the Telegram end-user
             # self.send_text(msg['chat']['id'], 'Your image is being processed. Please wait...')
-            self.send_text(msg['chat']['id'], 'Hello, Thank you for choosing our service, \n the image is being processed. Please wait...')
+            self.send_text(msg['chat']['id'], 'Hello, Thank you for choosing our service, \n The image is being processed. Please hold on for a moment...')
 
 
 if __name__ == '__main__':
