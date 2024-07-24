@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: samer-polybot
-          image: walaahij/polybot:125_20240724_102831
+          image: walaahij/polybot:126_20240724_102911
           ports:
             - containerPort: 8443
           env:
