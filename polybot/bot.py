@@ -164,7 +164,8 @@ class ObjectDetectionBot(Bot):
             send_job_to_sqs(queue_url, s3_key, msg['chat']['id'])
 
             # Send message to the Telegram end-user
-            self.send_text(msg['chat']['id'], 'Your image is being processed. Please wait...')
+            # self.send_text(msg['chat']['id'], 'Your image is being processed. Please wait...')
+            self.send_text(msg['chat']['id'], 'Hello, Thank you for choosing our service, \n the image is being processed. Please wait...')
 
 
 if __name__ == '__main__':
